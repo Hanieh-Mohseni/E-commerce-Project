@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import NavBar from "./NavBar";
+
+import NavBar from "../components/NavBar";
 import { NavLink, useHistory } from "react-router-dom";
 
 //apis
