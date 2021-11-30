@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import NavBar from "./NavBar";
+import NavBar from "../components/NavBar";
 import { NavLink } from "react-router-dom";
 
 const SignInPage = () => {
