@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import HomePage from "../components/HomePage";
-import SignInPage from "../components/SignInPage";
-import Cart from "../components/Cart";
+import HomePage from "./HomePage";
+import SignInPage from "./SignInPage";
+import Cart from "./Cart";
 
 const App = () => {
   return (
