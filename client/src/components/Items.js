@@ -11,7 +11,7 @@ const Items = () => {
       {data &&
         data.map((item) => {
           return (
-            <ProductDiv>
+            <ProductDiv key={item._id}>
               <Div1>
                 <ProductName>{item.name}</ProductName>
                 <ProductCategory>{item.category}</ProductCategory>
@@ -36,7 +36,8 @@ const Wrapper = styled.div`
   flex-wrap: wrap;
 `;
 
-const ProductDiv = styled.button`
+// this cannot be a button because a button cannot have a nested button element(BuyButton)
+const ProductDiv = styled.div`
   display: flex;
   margin-bottom: 12px;
   width: 300px;

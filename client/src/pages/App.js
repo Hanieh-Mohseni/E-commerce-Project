@@ -1,7 +1,9 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+
 import HomePage from "./HomePage";
 import SignInPage from "./SignInPage";
+import SignUpPage from "./SignUpPage";
 import Cart from "./Cart";
 
 const App = () => {
@@ -14,6 +16,9 @@ const App = () => {
           </Route>
           <Route exact path="/signin">
             <SignInPage />
+          </Route>
+          <Route exact path="/signup">
+            <SignUpPage />
           </Route>
           <Route exact path="/items"></Route>
           <Route path="/cart">
