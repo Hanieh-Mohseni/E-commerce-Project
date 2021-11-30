@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 
 //route handlers
-const { getItems } = require("./handlers");
+const { getItems, signIn, signUp } = require("./handlers");
 
 const PORT = 4000;
 
@@ -29,5 +29,9 @@ express()
 
   // REST endpoints
   .get("/api/items", getItems)
+
+  .post("/api/signin", signIn)
+
+  .post("/api/signup", signUp)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));

@@ -1,29 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import NavBar from "./NavBar";
+import NavBar from "../components/NavBar";
 import { NavLink, useHistory } from "react-router-dom";
+import { signUp } from "../api/users";
 
-//apis
-import { signIn } from "../api/users";
+//hooks
 import { useInputState } from "../hooks";
 
-const SignInPage = () => {
+const SignUpPage = () => {
   const history = useHistory();
   const initialState = {
     email: "",
+    firstName: "",
+    lastName: "",
   };
-  const [input, handleInputChange] = useInputState(initialState);
+  const [userInfo, handleUserInfoChange] = useInputState(initialState);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { status, data } = await signIn(input);
-    //successful login
+    const { status, data } = await signUp(userInfo);
+    //successful signup
     if (status === 200) {
       //**TODO**
       //context for current user
       //update the user state
       history.push("/");
     } else {
-      //user not found
+      //server error
     }
   };
 
@@ -35,11 +38,23 @@ const SignInPage = () => {
         <FormSignIn onSubmit={handleSubmit}>
           Sign In{" "}
           <Input
-            placeholder="email address"
-            value={input.email}
             name="email"
+            placeholder="Email Address"
             type="email"
-            onChange={handleInputChange}
+            value={userInfo.email}
+            onChange={handleUserInfoChange}
+          />
+          <Input
+            name="firstName"
+            placeholder="First Name"
+            value={userInfo.firstName}
+            onChange={handleUserInfoChange}
+          />
+          <Input
+            name="lastName"
+            placeholder="Last Name"
+            value={userInfo.lastName}
+            onChange={handleUserInfoChange}
           />
           <SubmitButton type="submit">GO</SubmitButton>
         </FormSignIn>
@@ -64,6 +79,8 @@ const DivSignIn = styled.div`
 
 const FormSignIn = styled.form`
   font-size: 20px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Input = styled.input`
@@ -74,7 +91,8 @@ const Input = styled.input`
   color: black;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-size: 19px;
+  margin-bottom: 10px;
 `;
 
 const SubmitButton = styled.button``;
-export default SignInPage;
+export default SignUpPage;
