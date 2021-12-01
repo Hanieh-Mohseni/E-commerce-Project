@@ -16,6 +16,7 @@ const App = () => {
             <SignInPage />
           </Route>
           <Route exact path="/items"></Route>
+          <Route exact path="/item"></Route>
           <Route path="/cart">
             <Cart />
           </Route>

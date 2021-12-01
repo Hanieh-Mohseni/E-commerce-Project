@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { ItemsContext } from "./ItemsContext";
+import { NavLink } from "react-router-dom";
 
 const Items = () => {
   const { data } = useContext(ItemsContext);
@@ -36,7 +37,7 @@ const Wrapper = styled.div`
   flex-wrap: wrap;
 `;
 
-const ProductDiv = styled.button`
+const ProductDiv = styled.a`
   display: flex;
   margin-bottom: 12px;
   width: 300px;

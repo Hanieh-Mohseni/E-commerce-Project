@@ -17,6 +17,7 @@ const Wrapper = styled.div`
   border-radius: 5px;
   padding: 20px;
   margin-bottom: 20px;
+  background-color: yellowgreen;
 `;
 
 const ItemsLink = styled.a`
