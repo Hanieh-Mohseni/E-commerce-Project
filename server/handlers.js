@@ -174,25 +174,41 @@ const getCompany = async (req, res) => {
 const addItemToCart = async (req, res) => {
   // declare the client
   const client = new MongoClient(MONGO_URI, options);
-  const { userId, itemId } = req.body;
+  const { userId, item } = req.body;
   try {
     //connect on every request
     await client.connect();
     const db = client.db(DB_NAME);
 
-    // add a new reservation
-    const id = uuidv4();
-    const { ok } = await db
-      .collection("users")
-      .findOneAndUpdate({ _id: userId }, { $push: { cart: itemId } });
+    const { value } = await db.collection("users").findOneAndUpdate(
+      { _id: userId, "cart._id": item._id },
+      {
+        $inc: { "cart.$.amount": 1 },
+      }
+    );
 
-    ok
-      ? res.status(200).json({
-          status: 200,
-          data: { ...req.body, id },
-          message: "item added to user cart",
-        })
-      : res.status(404).json({ status: 500, data: "Server Error" });
+    if (value) {
+      res.status(200).json({
+        status: 200,
+        data: { ...req.body },
+        message: "item added to user cart",
+      });
+    } else {
+      const { value } = await db
+        .collection("users")
+        .findOneAndUpdate(
+          { _id: userId },
+          { $push: { cart: { ...item, amount: 1 } } }
+        );
+
+      value
+        ? res.status(200).json({
+            status: 200,
+            data: { ...req.body },
+            message: "item added to user cart",
+          })
+        : res.status(404).json({ status: 500, data: "Server Error" });
+    }
   } catch (err) {
     console.log(err.stack);
   } finally {

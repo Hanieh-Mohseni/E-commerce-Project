@@ -24,7 +24,7 @@ const SignUpPage = () => {
       //**TODO**
       //context for current user
       //update the user state
-      history.push("/");
+      history.push("/signin");
     } else {
       //server error
     }

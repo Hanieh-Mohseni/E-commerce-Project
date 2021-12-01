@@ -1,25 +1,35 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { ItemsContext } from "./ItemsContext";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
+import { useUserContext } from "../contexts/UserContext";
+import { addItemToCart } from "../api/users";
 
 const Items = () => {
   const { data, numOfCartItems, setNumOfCartItems, cartItems, setCartItems } =
     useContext(ItemsContext);
   console.log(data);
 
-  const updateCart = (id) => {
-    setNumOfCartItems(numOfCartItems + 1);
-    setCartItems((cartItems) => [...cartItems, id]);
+  const history = useHistory();
+  const {
+    state: { userId },
+    actions: { refreshCart },
+  } = useUserContext();
+
+  const updateCart = async (item) => {
+    const { status } = await addItemToCart({ userId, item });
+    if (status === 200) {
+      refreshCart();
+      history.push("/cart");
+    }
   };
 
-  console.log(cartItems);
   return (
     <Wrapper>
       {data &&
         data.map((item) => {
           return (
-            <ProductDiv>
+            <ProductDiv key={item._id}>
               <Div1 to={`/item/${item._id}`}>
                 <ProductName>{item.name}</ProductName>
                 <ProductCategory>{item.category}</ProductCategory>
@@ -31,7 +41,12 @@ const Items = () => {
                 <BuyButton>Buy</BuyButton>
                 <AddtoCartBtn
                   onClick={() => {
-                    updateCart(item._id);
+                    if (!userId) {
+                      //only let logged in users add items to cart
+                      history.push("/signin");
+                      return;
+                    }
+                    updateCart(item);
                   }}
                 >
                   Add to cart

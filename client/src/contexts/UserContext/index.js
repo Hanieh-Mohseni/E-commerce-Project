@@ -2,7 +2,7 @@ import React, { useReducer, useContext, createContext } from "react";
 import * as actions from "./actionTypes";
 
 //api
-import { signIn } from "../../api/users";
+import { getUser } from "../../api/users";
 
 export const UserContext = createContext();
 
@@ -33,6 +33,12 @@ const reducer = (state, action) => {
       return {
         ...initialState,
       };
+    case actions.REFRESH_CART:
+      const cart = action.payload.cart;
+      return {
+        ...state,
+        cart,
+      };
     default:
       throw new Error(`Unknown Error`);
   }
@@ -59,16 +65,30 @@ export const UserProvider = ({ children }) => {
   };
 
   const logout = () => {
+    sessionStorage.removeItem("user");
     dispatch({
       type: actions.LOGOUT,
     });
+  };
+
+  const refreshCart = async () => {
+    loading();
+    const { status, data } = await getUser({ email: state.email });
+    if (status === 200) {
+      const { _id, ...rest } = data;
+      sessionStorage.setItem("user", JSON.stringify({ ...rest, userId: _id }));
+      dispatch({
+        type: actions.REFRESH_CART,
+        payload: { cart: data.cart },
+      });
+    }
   };
 
   return (
     <UserContext.Provider
       value={{
         state,
-        actions: { login, logout },
+        actions: { login, logout, refreshCart },
       }}
     >
       {children}
