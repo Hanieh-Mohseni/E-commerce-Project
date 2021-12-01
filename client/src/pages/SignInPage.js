@@ -26,7 +26,7 @@ const SignInPage = () => {
     if (status === 200) {
       const { _id, ...rest } = data;
       //store it in sessionStorage
-      sessionStorage.setItem("user", JSON.stringify({ rest, userId: _id }));
+      sessionStorage.setItem("user", JSON.stringify({ ...rest, userId: _id }));
       //context for current user
       //update the user context
       login(data);

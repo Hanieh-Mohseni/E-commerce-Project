@@ -1,14 +1,17 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
+import { useUserContext } from "../contexts/UserContext";
 import { ItemsContext } from "./ItemsContext";
 
 const NavBar = () => {
-  const { numOfCartItems } = useContext(ItemsContext);
+  const {
+    state: { cart },
+  } = useUserContext();
 
   return (
     <Wrapper>
       <ItemsLink href="/">Products</ItemsLink>
-      <CartLink href="/cart">Cart ({numOfCartItems})</CartLink>
+      <CartLink href="/cart">Cart ({cart.length})</CartLink>
     </Wrapper>
   );
 };
