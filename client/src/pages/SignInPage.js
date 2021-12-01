@@ -8,7 +8,13 @@ import { NavLink, useHistory } from "react-router-dom";
 import { signIn } from "../api/users";
 import { useInputState } from "../hooks";
 
+//contexts
+import { useUserContext } from "../contexts/UserContext";
+
 const SignInPage = () => {
+  const {
+    actions: { login },
+  } = useUserContext();
   const history = useHistory();
   const initialState = {
     email: "",
@@ -19,9 +25,12 @@ const SignInPage = () => {
     const { status, data } = await signIn(input);
     //successful login
     if (status === 200) {
-      //**TODO**
+      const { _id, ...rest } = data;
+      //store it in sessionStorage
+      sessionStorage.setItem("user", JSON.stringify({ rest, userId: _id }));
       //context for current user
-      //update the user state
+      //update the user context
+      login(data);
       history.push("/");
     } else {
       //user not found
