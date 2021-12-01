@@ -5,8 +5,15 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 
 //route handlers
-const { getItems, getCompany, getCompanies, getItem, signIn, signUp } = require("./handlers");
-
+const {
+  getItems,
+  getCompany,
+  getCompanies,
+  getItem,
+  signIn,
+  signUp,
+  addItemToCart,
+} = require("./handlers");
 
 const PORT = 4000;
 
@@ -29,26 +36,16 @@ express()
   .use("/", express.static(__dirname + "/"))
 
   // ====================REST endpoints===================
+  .post("/api/signin", signIn)
+  .post("/api/signup", signUp)
+
   .get("/api/items", getItems)
   .get("/api/item/:id", getItem)
   .get("/api/companies", getCompanies)
-  .get("/api/Company/:id", getCompany)
-  
+  .get("/api/company/:id", getCompany)
 
-  
-
-
-
-
+  .post("/api/cart", addItemToCart)
 
   //========================================================
-
-
-
-
-
-  .post("/api/signin", signIn)
-
-  .post("/api/signup", signUp)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));

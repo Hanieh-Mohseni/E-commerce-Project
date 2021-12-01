@@ -69,7 +69,6 @@ const signUp = async (req, res) => {
   }
 };
 
-
 //get all items
 const getItems = async (req, res) => {
   // declare the client
@@ -98,91 +97,118 @@ const getItems = async (req, res) => {
 
 //get single item
 const getItem = async (req, res) => {
-  
-    // declare the client
-    const client = new MongoClient(MONGO_URI, options);
-    const _id= req.params.id;
-    try {
-      //connect on every request
-      await client.connect();
-      const db = client.db("E-Commerce");
-  
-      // get one item
-      const data = await db.collection("items").findOne({ _id: Number(_id) });
-  
-      data
-        ? res.status(200).json({ status: 200, data })
-        : res.status(404).json({ status: 404, data: "Not Found"});
-    } catch (err) {
-      console.log(err.stack);
-    } finally {
-      // close the connection to the database server
-      await client.close();
-    }
-  };
-  
+  // declare the client
+  const client = new MongoClient(MONGO_URI, options);
+  const _id = req.params.id;
+  try {
+    //connect on every request
+    await client.connect();
+    const db = client.db("E-Commerce");
 
+    // get one item
+    const data = await db.collection("items").findOne({ _id: Number(_id) });
+
+    data
+      ? res.status(200).json({ status: 200, data })
+      : res.status(404).json({ status: 404, data: "Not Found" });
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    // close the connection to the database server
+    await client.close();
+  }
+};
 
 //==============================================================
 //get all companies
 const getCompanies = async (req, res) => {
+  // declare the client
+  const client = new MongoClient(MONGO_URI, options);
+  try {
+    //connect on every request
+    await client.connect();
+    const db = client.db("E-Commerce");
 
-    // declare the client
-    const client = new MongoClient(MONGO_URI, options);
-    try {
-      //connect on every request
-      await client.connect();
-      const db = client.db("E-Commerce");
-  
-      // get one item
-      const data = await db.collection("companies").find().toArray();
-  
-      data
-        ? res.status(200).json({ status: 200, data })
-        : res.status(404).json({ status: 404, data: "Not Found" });
-    } catch (err) {
-      console.log(err.stack);
-    } finally {
-      // close the connection to the database server
-      await client.close();
-    }
-  };
-  
+    // get one item
+    const data = await db.collection("companies").find().toArray();
 
-
+    data
+      ? res.status(200).json({ status: 200, data })
+      : res.status(404).json({ status: 404, data: "Not Found" });
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    // close the connection to the database server
+    await client.close();
+  }
+};
 
 //=============================================================
 
 //get single company
 const getCompany = async (req, res) => {
+  // declare the client
+  const client = new MongoClient(MONGO_URI, options);
+  const _id = req.params.id;
 
-  
-         // declare the client
-      const client = new MongoClient(MONGO_URI, options);
-      const _id= req.params.id;
+  try {
+    //connect on every request
+    await client.connect();
+    const db = client.db("E-Commerce");
 
-      try {
-        //connect on every request
-        await client.connect();
-        const db = client.db("E-Commerce");
-    
-        // get one item
-        const data = await db.collection("companies").findOne({ _id: Number(_id) });
-    
-        data
-          ? res.status(200).json({ status: 200, data })
-          : res.status(404).json({ status: 404, data: "Not Found" });
-      } catch (err) {
-        console.log(err.stack);
-      } finally {
-        // close the connection to the database server
-        await client.close();
-      }
-    };
-    
+    // get one item
+    const data = await db.collection("companies").findOne({ _id: Number(_id) });
 
+    data
+      ? res.status(200).json({ status: 200, data })
+      : res.status(404).json({ status: 404, data: "Not Found" });
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    // close the connection to the database server
+    await client.close();
+  }
+};
+
+//add item in cart to user data
+const addItemToCart = async (req, res) => {
+  // declare the client
+  const client = new MongoClient(MONGO_URI, options);
+  const { userId, itemId } = req.body;
+  try {
+    //connect on every request
+    await client.connect();
+    const db = client.db(DB_NAME);
+
+    // add a new reservation
+    const id = uuidv4();
+    const { ok } = await db
+      .collection("users")
+      .findOneAndUpdate({ _id: userId }, { $push: { cart: itemId } });
+
+    ok
+      ? res.status(200).json({
+          status: 200,
+          data: { ...req.body, id },
+          message: "item added to user cart",
+        })
+      : res.status(404).json({ status: 500, data: "Server Error" });
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    // close the connection to the database server
+    await client.close();
+  }
+};
 
 //=============================================================
 
-module.exports = { getItems,getItem,getCompanies,getCompany, signIn, signUp };
-
+module.exports = {
+  getItems,
+  getItem,
+  getCompanies,
+  getCompany,
+  signIn,
+  signUp,
+  addItemToCart,
+};
