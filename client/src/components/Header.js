@@ -18,14 +18,14 @@ const Header = () => {
         <Title to="/">E-com</Title>
 
         {userId ? (
-          <LoginButton
+          <LogoutButton
             onClick={() => {
-              sessionStorage.removeItem("user");
               logout();
+              window.location.reload();
             }}
           >
             Logout
-          </LoginButton>
+          </LogoutButton>
         ) : (
           <SignInButton to="/signin">Sign In</SignInButton>
         )}
@@ -64,7 +64,7 @@ const SignInButton = styled(NavLink)`
   }
 `;
 
-const LoginButton = styled.button`
+const LogoutButton = styled.button`
   color: black;
   font-weight: bold;
   text-decoration: none;
