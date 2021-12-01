@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-
-import NavBar from "../components/NavBar";
+import Header from "../components/Header";
 import { NavLink, useHistory } from "react-router-dom";
 
 //apis
@@ -39,11 +38,11 @@ const SignInPage = () => {
 
   return (
     <Wrapper>
-      <Title to="/">E-com</Title>
-      <NavBar />
+      <Header />
       <DivSignIn>
         <FormSignIn onSubmit={handleSubmit}>
-          Sign In{" "}
+          <SignInText> Sign In</SignInText>
+
           <Input
             placeholder="email address"
             value={input.email}
@@ -60,10 +59,11 @@ const SignInPage = () => {
 
 const Wrapper = styled.div``;
 
-const Title = styled(NavLink)`
-  text-decoration: none;
-  color: black;
-  font-size: 40px;
+const SignInText = styled.h3`
+  font-size: 50px;
+  font-family: "Bebas Neue", cursive;
+  margin-bottom: 5px;
+  color: goldenrod;
 `;
 
 const DivSignIn = styled.div`
@@ -79,6 +79,7 @@ const FormSignIn = styled.form`
 const Input = styled.input`
   width: 255px;
   padding: 10px;
+
   border: solid black 2px;
   border-radius: 5px;
   color: black;
@@ -86,5 +87,19 @@ const Input = styled.input`
   font-size: 19px;
 `;
 
-const SubmitButton = styled.button``;
+const SubmitButton = styled.button`
+  width: 55px;
+  height: 45px;
+  margin-left: 5px;
+  border: none;
+  border-radius: 5px;
+  font-size: 25px;
+  color: white;
+  font-family: "Bebas Neue", cursive;
+  background-color: grey;
+  &:hover {
+    background-color: goldenrod;
+    color: black;
+  }
+`;
 export default SignInPage;

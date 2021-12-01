@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { ItemsContext } from "./ItemsContext";
 
 const NavBar = () => {
+  const { numOfCartItems } = useContext(ItemsContext);
+
   return (
     <Wrapper>
       <ItemsLink href="/">Products</ItemsLink>
-      <CartLink href="/cart">Cart</CartLink>
+      <CartLink href="/cart">Cart ({numOfCartItems})</CartLink>
     </Wrapper>
   );
 };
@@ -13,22 +16,36 @@ const NavBar = () => {
 const Wrapper = styled.div`
   display: flex;
   justify-content: end;
-  border: solid black 1px;
+  border: none;
   border-radius: 5px;
   padding: 20px;
   margin-bottom: 20px;
+  background-color: grey;
 `;
 
 const ItemsLink = styled.a`
-  color: black;
+  color: white;
   text-decoration: none;
+  font-family: "Bebas Neue", cursive;
+  font-size: 25px;
+  &:hover {
+    font-size: 28px;
+    color: gold;
+  }
 `;
 
 const CartLink = styled.a`
   margin-left: 100px;
   margin-right: 50px;
-  color: black;
+  color: white;
   text-decoration: none;
+  font-family: "Bebas Neue", cursive;
+  font-size: 25px;
+
+  &:hover {
+    font-size: 28px;
+    color: gold;
+  }
 `;
 
 export default NavBar;

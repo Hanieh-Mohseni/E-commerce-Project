@@ -4,6 +4,7 @@ import HomePage from "./HomePage";
 import SignInPage from "./SignInPage";
 import Cart from "./Cart";
 import ItemDetails from "../components/ItemDetails";
+import SignUpPage from "./SignUpPage";
 
 const App = () => {
   return (
@@ -15,6 +16,9 @@ const App = () => {
           </Route>
           <Route exact path="/signin">
             <SignInPage />
+          </Route>
+          <Route exact path="/signup">
+            <SignUpPage />
           </Route>
           <Route exact path="/items"></Route>
           <Route exact path="/item/:itemId">
