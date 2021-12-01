@@ -25,7 +25,6 @@ const reducer = (state, action) => {
     case actions.LOGIN:
       const { _id, ...rest } = action.payload.userInfo;
       return {
-        ...state,
         loading: false,
         userId: _id,
         ...rest,
