@@ -20,11 +20,10 @@ const App = () => {
           <Route exact path="/signup">
             <SignUpPage />
           </Route>
-          <Route exact path="/items"></Route>
           <Route exact path="/item/:itemId">
             <ItemDetails />
           </Route>
-          <Route path="/cart">
+          <Route exact path="/cart">
             <Cart />
           </Route>
         </Switch>

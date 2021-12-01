@@ -64,12 +64,6 @@ const SignUpPage = () => {
 
 const Wrapper = styled.div``;
 
-const Title = styled(NavLink)`
-  text-decoration: none;
-  color: black;
-  font-size: 40px;
-`;
-
 const DivSignIn = styled.div`
   display: flex;
   justify-content: center;

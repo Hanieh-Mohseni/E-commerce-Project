@@ -15,7 +15,7 @@ const Header = () => {
   return (
     <Wrapper>
       <DivUpper>
-        <Title>E-com</Title>
+        <Title to="/">E-com</Title>
 
         {userId ? (
           <LoginButton
@@ -27,7 +27,7 @@ const Header = () => {
             Logout
           </LoginButton>
         ) : (
-          <SignInButton href="/signin">Sign In</SignInButton>
+          <SignInButton to="/signin">Sign In</SignInButton>
         )}
       </DivUpper>
       <NavBar />
