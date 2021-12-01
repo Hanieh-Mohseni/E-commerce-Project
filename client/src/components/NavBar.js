@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { ItemsContext } from "./ItemsContext";
 
 const NavBar = () => {
+  const { numOfCartItems } = useContext(ItemsContext);
+
   return (
     <Wrapper>
       <ItemsLink href="/">Products</ItemsLink>
-      <CartLink href="/cart">Cart</CartLink>
+      <CartLink href="/cart">Cart ({numOfCartItems})</CartLink>
     </Wrapper>
   );
 };

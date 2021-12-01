@@ -4,9 +4,16 @@ import { ItemsContext } from "./ItemsContext";
 import { NavLink } from "react-router-dom";
 
 const Items = () => {
-  const { data } = useContext(ItemsContext);
+  const { data, numOfCartItems, setNumOfCartItems, cartItems, setCartItems } =
+    useContext(ItemsContext);
   console.log(data);
 
+  const updateCart = (id) => {
+    setNumOfCartItems(numOfCartItems + 1);
+    setCartItems((cartItems) => [...cartItems, id]);
+  };
+
+  console.log(cartItems);
   return (
     <Wrapper>
       {data &&
@@ -22,6 +29,13 @@ const Items = () => {
                 <StockProduct>in stock: {item.numInStock}</StockProduct>
                 <PriceProduct>{item.price}$</PriceProduct>
                 <BuyButton>Buy</BuyButton>
+                <AddtoCartBtn
+                  onClick={() => {
+                    updateCart(item._id);
+                  }}
+                >
+                  Add to cart
+                </AddtoCartBtn>
               </Div2>
             </ProductDiv>
           );
@@ -81,5 +95,10 @@ const PriceProduct = styled.p`
 
 const BuyButton = styled.button`
   cursor: pointer;
+`;
+
+const AddtoCartBtn = styled.button`
+  cursor: pointer;
+  margin-top: 3px;
 `;
 export default Items;

@@ -41,7 +41,16 @@ const ItemDetails = () => {
         <Div2>
           <StockProduct>in stock: {item.data.numInStock}</StockProduct>
           <PriceProduct>{item.data.price}$</PriceProduct>
-          <BuyButton>Buy</BuyButton>
+          <DivButton>
+            <BuyButton
+              onClick={() => {
+                item.data.numInStock -= -1;
+              }}
+            >
+              Buy
+            </BuyButton>
+            <AddtoCartBtn>Add to cart</AddtoCartBtn>
+          </DivButton>
         </Div2>
       </ProductDiv>
     </Wrapper>
@@ -60,7 +69,8 @@ const ProductDiv = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 70px;
-  margin-left: 100px;
+
+  padding: 20px;
 `;
 const Div1 = styled.div``;
 
@@ -89,11 +99,22 @@ const PriceProduct = styled.p`
   font-size: 32px;
 `;
 
+const DivButton = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const BuyButton = styled.button`
   width: 80px;
   height: 40px;
-
   cursor: pointer;
+`;
+
+const AddtoCartBtn = styled.button`
+  width: 80px;
+  height: 40px;
+  cursor: pointer;
+  margin-top: 5px;
 `;
 
 export default ItemDetails;
