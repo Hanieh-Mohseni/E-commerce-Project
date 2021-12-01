@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import NavBar from "./NavBar";
+import Header from "./Header";
 
 const ItemDetails = () => {
   const [item, setItem] = useState("");
@@ -30,8 +30,7 @@ const ItemDetails = () => {
 
   return (
     <Wrapper>
-      <Title to="/">E-com</Title>
-      <NavBar />
+      <Header />
       <ProductDiv>
         <Div1>
           <ProductName>{item.data.name}</ProductName>
@@ -69,7 +68,6 @@ const ProductDiv = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 70px;
-
   padding: 20px;
 `;
 const Div1 = styled.div``;
@@ -81,6 +79,7 @@ const ProductName = styled.h2`
 const ProductCategory = styled.p`
   margin-top: 2px;
   font-size: 20px;
+  color: goldenrod;
 `;
 
 const ProductImg = styled.img`
@@ -97,6 +96,7 @@ const StockProduct = styled.p`
 `;
 const PriceProduct = styled.p`
   font-size: 32px;
+  color: goldenrod;
 `;
 
 const DivButton = styled.div`
@@ -108,6 +108,13 @@ const BuyButton = styled.button`
   width: 80px;
   height: 40px;
   cursor: pointer;
+  border: none;
+  background-color: grey;
+  border-radius: 5px;
+  &:hover  {
+    background-color: gold;
+    font-weight: bold;
+  }
 `;
 
 const AddtoCartBtn = styled.button`
@@ -115,6 +122,13 @@ const AddtoCartBtn = styled.button`
   height: 40px;
   cursor: pointer;
   margin-top: 5px;
+  border: none;
+  background-color: grey;
+  border-radius: 5px;
+  &:hover  {
+    background-color: gold;
+    font-weight: bold;
+  }
 `;
 
 export default ItemDetails;

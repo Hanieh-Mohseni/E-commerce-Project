@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import NavBar from "../components/NavBar";
+import Header from "../components/Header";
 import { NavLink, useHistory } from "react-router-dom";
 import { signUp } from "../api/users";
 
@@ -32,8 +32,7 @@ const SignUpPage = () => {
 
   return (
     <Wrapper>
-      <Title to="/">E-com</Title>
-      <NavBar />
+      <Header />
       <DivSignIn>
         <FormSignIn onSubmit={handleSubmit}>
           Sign In{" "}
