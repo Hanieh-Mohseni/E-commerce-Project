@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { ItemsContext } from "./ItemsContext";
+import { NavLink } from "react-router-dom";
 
 const Items = () => {
   const { data } = useContext(ItemsContext);
@@ -11,8 +12,8 @@ const Items = () => {
       {data &&
         data.map((item) => {
           return (
-            <ProductDiv href={`/item/${item._id}`}>
-              <Div1>
+            <ProductDiv>
+              <Div1 to={`/item/${item._id}`}>
                 <ProductName>{item.name}</ProductName>
                 <ProductCategory>{item.category}</ProductCategory>
                 <ProductImg src={item.imageSrc} />
@@ -36,9 +37,9 @@ const Wrapper = styled.div`
   flex-wrap: wrap;
 `;
 
-const ProductDiv = styled.a`
+const ProductDiv = styled.div`
   display: flex;
-  margin-bottom: 12px;
+  margin-bottom: 3px;
   width: 300px;
   border: 1px solid black;
   border-radius: 5px;
@@ -46,8 +47,10 @@ const ProductDiv = styled.a`
   cursor: pointer;
 `;
 
-const Div1 = styled.div`
+const Div1 = styled(NavLink)`
   margin-left: 10px;
+  text-decoration: none;
+  color: black;
 `;
 
 const Div2 = styled.div`
