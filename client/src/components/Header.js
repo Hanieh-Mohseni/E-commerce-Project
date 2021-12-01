@@ -3,15 +3,32 @@ import styled from "styled-components";
 import NavBar from "../components/NavBar";
 import { NavLink } from "react-router-dom";
 
+//contexts
+import { useUserContext } from "../contexts/UserContext";
+
 const Header = () => {
+  const {
+    state: { userId },
+    actions: { logout },
+  } = useUserContext();
+
   return (
     <Wrapper>
       <DivUpper>
-        <Title to={"/"}>Team MONGO</Title>
-        <SignDiv>
-          <SignInButton to="/signin">Sign In</SignInButton>
-          <SignInButton to="/signup">Sign Up</SignInButton>
-        </SignDiv>
+        <Title>E-com</Title>
+
+        {userId ? (
+          <LoginButton
+            onClick={() => {
+              sessionStorage.removeItem("user");
+              logout();
+            }}
+          >
+            Logout
+          </LoginButton>
+        ) : (
+          <SignInButton href="/signin">Sign In</SignInButton>
+        )}
       </DivUpper>
       <NavBar />
     </Wrapper>
@@ -45,6 +62,15 @@ const SignInButton = styled(NavLink)`
     color: gold;
     font-size: 22px;
   }
+`;
+
+const LoginButton = styled.button`
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-top: 5px;
 `;
 
 export default Header;
