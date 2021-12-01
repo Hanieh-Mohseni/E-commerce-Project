@@ -11,7 +11,7 @@ const NavBar = () => {
   return (
     <Wrapper>
       <ItemsLink href="/">Products</ItemsLink>
-      <CartLink href="/cart">Cart ({cart.length})</CartLink>
+      <CartLink href="/cart">Cart ({cart ? cart.length : 0})</CartLink>
     </Wrapper>
   );
 };
