@@ -1,4 +1,4 @@
-import React, { useEffect, createContext, useState } from "react";
+import React, { useEffect, createContext } from "react";
 import { useFetch } from "../hooks/useFetch/index";
 
 export const ItemsContext = createContext(null);

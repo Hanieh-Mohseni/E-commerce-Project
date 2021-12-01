@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import NavBar from "../components/NavBar";
 
 const Cart = () => {
   return (
     <Wrapper>
-      <Title to="/">E-com</Title>CART PAGE
+      <Title to="/">E-com</Title>
+      <NavBar />
     </Wrapper>
   );
 };
