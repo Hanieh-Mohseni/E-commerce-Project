@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { ItemsContext } from "./ItemsContext";
-import { NavLink } from "react-router-dom";
 
 const Items = () => {
   const { data } = useContext(ItemsContext);
@@ -12,7 +11,7 @@ const Items = () => {
       {data &&
         data.map((item) => {
           return (
-            <ProductDiv>
+            <ProductDiv href={`/item/${item._id}`}>
               <Div1>
                 <ProductName>{item.name}</ProductName>
                 <ProductCategory>{item.category}</ProductCategory>
