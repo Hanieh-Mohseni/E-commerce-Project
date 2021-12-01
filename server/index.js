@@ -5,7 +5,8 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 
 //route handlers
-const { getItems, signIn, signUp } = require("./handlers");
+const { getItems, getCompany, getCompanies, getItem, signIn, signUp } = require("./handlers");
+
 
 const PORT = 4000;
 
@@ -27,8 +28,24 @@ express()
   .use(express.urlencoded({ extended: false }))
   .use("/", express.static(__dirname + "/"))
 
-  // REST endpoints
+  // ====================REST endpoints===================
   .get("/api/items", getItems)
+  .get("/api/item/:id", getItem)
+  .get("/api/companies", getCompanies)
+  .get("/api/Company/:id", getCompany)
+  
+
+  
+
+
+
+
+
+  //========================================================
+
+
+
+
 
   .post("/api/signin", signIn)
 
