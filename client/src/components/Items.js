@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useItemsContext } from "./ItemsContext";
+import { useItemsContext } from "../contexts/ItemContext";
 import { NavLink, useHistory } from "react-router-dom";
 import { useUserContext } from "../contexts/UserContext";
 import { addItemToCart } from "../api/users";
@@ -95,7 +95,8 @@ const Items = () => {
 const Wrapper = styled.div`
   width: auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  flex-wrap: wrap;
   flex-wrap: wrap;
 `;
 
@@ -161,7 +162,7 @@ const AddtoCartBtn = styled.button`
 
   &:disabled {
     cursor: not-allowed;
-    background-color: none;
+    opacity: 0.4;
   }
 
   &:hover  {

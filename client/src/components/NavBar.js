@@ -1,7 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useUserContext } from "../contexts/UserContext";
-import { ItemsContext } from "./ItemsContext";
 
 const NavBar = () => {
   const {

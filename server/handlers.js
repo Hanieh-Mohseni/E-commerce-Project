@@ -20,8 +20,7 @@ const signIn = async (req, res) => {
     await client.connect();
     const db = client.db(DB_NAME);
 
-    // get all the items
-    // we might need to retrieve only item ids or implement pagination
+    //find user with a provided email
     const data = await db.collection("users").findOne({ email });
 
     data
@@ -30,22 +29,18 @@ const signIn = async (req, res) => {
   } catch (err) {
     console.log(err.stack);
   } finally {
-    // close the connection to the database server
     await client.close();
   }
 };
 
 //signup logic
 const signUp = async (req, res) => {
-  // declare the client
   const client = new MongoClient(MONGO_URI, options);
   const { email, firstName, lastName } = req.body;
   try {
-    //connect on every request
     await client.connect();
     const db = client.db(DB_NAME);
 
-    // add a new reservation
     const id = uuidv4();
     const { acknowledged } = await db.collection("users").insertOne({
       _id: id,
@@ -64,23 +59,19 @@ const signUp = async (req, res) => {
   } catch (err) {
     console.log(err.stack);
   } finally {
-    // close the connection to the database server
     await client.close();
   }
 };
 
-//get all items
+//get paginated items
 const getItems = async (req, res) => {
-  // declare the client
   const client = new MongoClient(MONGO_URI, options);
   const { page } = req.query;
   try {
-    //connect on every request
     await client.connect();
     const db = client.db(DB_NAME);
 
-    // get all the items
-    // we might need to retrieve only item ids or implement pagination
+    // get 10 items at once
     const data = await db
       .collection("items")
       .find()
@@ -94,20 +85,15 @@ const getItems = async (req, res) => {
   } catch (err) {
     console.log(err.stack);
   } finally {
-    // close the connection to the database server
     await client.close();
   }
 };
 
-//=========================================================//
-
 //get single item
 const getItem = async (req, res) => {
-  // declare the client
   const client = new MongoClient(MONGO_URI, options);
   const _id = req.params.id;
   try {
-    //connect on every request
     await client.connect();
     const db = client.db("E-Commerce");
 
@@ -120,22 +106,17 @@ const getItem = async (req, res) => {
   } catch (err) {
     console.log(err.stack);
   } finally {
-    // close the connection to the database server
     await client.close();
   }
 };
 
-//==============================================================
 //get all companies
 const getCompanies = async (req, res) => {
-  // declare the client
   const client = new MongoClient(MONGO_URI, options);
   try {
-    //connect on every request
     await client.connect();
     const db = client.db("E-Commerce");
 
-    // get one item
     const data = await db.collection("companies").find().toArray();
 
     data
@@ -144,25 +125,20 @@ const getCompanies = async (req, res) => {
   } catch (err) {
     console.log(err.stack);
   } finally {
-    // close the connection to the database server
     await client.close();
   }
 };
-
-//=============================================================
 
 //get single company
 const getCompany = async (req, res) => {
   // declare the client
   const client = new MongoClient(MONGO_URI, options);
   const _id = req.params.id;
-
   try {
-    //connect on every request
     await client.connect();
     const db = client.db("E-Commerce");
 
-    // get one item
+    // get a single company
     const data = await db.collection("companies").findOne({ _id: Number(_id) });
 
     data
@@ -171,21 +147,21 @@ const getCompany = async (req, res) => {
   } catch (err) {
     console.log(err.stack);
   } finally {
-    // close the connection to the database server
     await client.close();
   }
 };
 
 //add item in cart to user data
 const addItemToCart = async (req, res) => {
-  // declare the client
   const client = new MongoClient(MONGO_URI, options);
   const { userId, item } = req.body;
   try {
-    //connect on every request
     await client.connect();
     const db = client.db(DB_NAME);
 
+    //update user doc
+    //this item already exists in user.cart arr
+    //simple increment the amount of item by 1
     const { value } = await db.collection("users").findOneAndUpdate(
       { _id: userId, "cart._id": item._id },
       {
@@ -200,6 +176,8 @@ const addItemToCart = async (req, res) => {
         message: "item added to user cart",
       });
     } else {
+      //this item doesn't exist in user.cart arr yet
+      //push the item with the amount value of 1
       const { value } = await db
         .collection("users")
         .findOneAndUpdate(
@@ -218,24 +196,50 @@ const addItemToCart = async (req, res) => {
   } catch (err) {
     console.log(err.stack);
   } finally {
-    // close the connection to the database server
+    await client.close();
+  }
+};
+
+//delete item from cart
+const deleteItemFromCart = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const { userId, itemId } = req.body;
+  try {
+    await client.connect();
+    const db = client.db(DB_NAME);
+
+    //find an item and remove it from the cart arr
+    const { modifiedCount } = await db.collection("users").updateOne(
+      { _id: userId },
+      {
+        $pull: { cart: { _id: Number(itemId) } },
+      }
+    );
+
+    modifiedCount
+      ? res.status(200).json({
+          status: 200,
+          data: { ...req.body },
+          message: "item removed from user cart",
+        })
+      : res.status(404).json({ status: 500, data: "Server Error" });
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
     await client.close();
   }
 };
 
 //buy item
 const buyItem = async (req, res) => {
-  // declare the client
   const client = new MongoClient(MONGO_URI, options);
   const { userId, itemIds } = req.body;
-  console.log(userId, itemIds);
+
   try {
-    //connect on every request
     await client.connect();
     const db = client.db(DB_NAME);
 
     // updating the number of item in stock
-
     const result = await Promise.all(
       itemIds.map(async (itemId) => {
         const { value: decValue } = await db
@@ -253,6 +257,7 @@ const buyItem = async (req, res) => {
       })
     );
 
+    //reset user.cart value to emply arr
     const { value: cartVal } = await db
       .collection("users")
       .findOneAndUpdate({ _id: userId }, { $set: { cart: [] } });
@@ -267,12 +272,9 @@ const buyItem = async (req, res) => {
   } catch (err) {
     console.log(err.stack);
   } finally {
-    // close the connection to the database server
     await client.close();
   }
 };
-
-//=============================================================
 
 module.exports = {
   getItems,
@@ -283,4 +285,5 @@ module.exports = {
   signUp,
   addItemToCart,
   buyItem,
+  deleteItemFromCart,
 };

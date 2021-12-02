@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
 import Items from "../components/Items";
-import { ItemsContext } from "../components/ItemsContext";
+import { useItemsContext } from "../contexts/ItemContext";
 
 const HomePage = () => {
-  const { loading } = useContext(ItemsContext);
+  const { loading } = useItemsContext();
   if (loading) {
     return <div>Loading...</div>;
   }

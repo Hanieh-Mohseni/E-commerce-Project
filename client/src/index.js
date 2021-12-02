@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { ItemsProvider } from "./components/ItemsContext";
+import { ItemsProvider } from "./contexts/ItemContext";
 import App from "./pages/App";
 
 //contexts
