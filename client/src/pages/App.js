@@ -5,6 +5,7 @@ import SignInPage from "./SignInPage";
 import Cart from "./Cart";
 import ItemDetails from "../components/ItemDetails";
 import SignUpPage from "./SignUpPage";
+import Confirmation from "./ConfirmationPage";
 
 const App = () => {
   return (
@@ -25,6 +26,9 @@ const App = () => {
           </Route>
           <Route exact path="/cart">
             <Cart />
+          </Route>
+          <Route exact path="/confirmation">
+            <Confirmation />
           </Route>
         </Switch>
       </div>
