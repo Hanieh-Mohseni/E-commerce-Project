@@ -73,14 +73,20 @@ const signUp = async (req, res) => {
 const getItems = async (req, res) => {
   // declare the client
   const client = new MongoClient(MONGO_URI, options);
+  const { page } = req.query;
   try {
     //connect on every request
     await client.connect();
-    const db = client.db("E-Commerce");
+    const db = client.db(DB_NAME);
 
     // get all the items
     // we might need to retrieve only item ids or implement pagination
-    const data = await db.collection("items").find().toArray();
+    const data = await db
+      .collection("items")
+      .find()
+      .skip(page > 0 ? (page - 1) * 10 : 0)
+      .limit(10)
+      .toArray();
 
     data
       ? res.status(200).json({ status: 200, data })
@@ -217,6 +223,42 @@ const addItemToCart = async (req, res) => {
   }
 };
 
+//buy item
+const buyItem = async (req, res) => {
+  // declare the client
+  const client = new MongoClient(MONGO_URI, options);
+  const { userId, itemId } = req.body;
+  console.log(userId, itemId);
+  try {
+    //connect on every request
+    await client.connect();
+    const db = client.db(DB_NAME);
+
+    // updating the number of item in stock
+    const { value: decValue } = await db
+      .collection("items")
+      .findOneAndUpdate({ _id: Number(itemId) }, { $inc: { numInStock: -1 } });
+
+    // adding purchase prop
+    const { value } = await db
+      .collection("users")
+      .findOneAndUpdate({ _id: userId }, { $push: { purchased: itemId } });
+
+    decValue && value
+      ? res.status(200).json({
+          status: 200,
+          data: { ...req.body },
+          message: "Item Purchased",
+        })
+      : res.status(404).json({ status: 500, data: "Server Error" });
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+    // close the connection to the database server
+    await client.close();
+  }
+};
+
 //=============================================================
 
 module.exports = {
@@ -227,4 +269,5 @@ module.exports = {
   signIn,
   signUp,
   addItemToCart,
+  buyItem,
 };
