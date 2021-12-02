@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
 import Header from "./Header";
+import { useHistory } from "react-router-dom";
+
+//apis
+import { getItem } from "../api/items";
+import { addItemToCart } from "../api/users";
+
+//contexts
+import { useUserContext } from "../contexts/UserContext";
 
 const ItemDetails = () => {
+  const history = useHistory();
+  const {
+    state: { userId },
+    actions: { refreshCart },
+  } = useUserContext();
   const [item, setItem] = useState("");
   const { itemId } = useParams();
 
   useEffect(() => {
     const fetchItemData = async () => {
       try {
-        const response = await fetch(`/api/item/${itemId}`);
-        const parseResponse = await response.json();
-        setItem(parseResponse);
-        console.log(item);
+        const { status, data } = await getItem(itemId);
+        if (status === 200) {
+          setItem(data);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -22,26 +34,49 @@ const ItemDetails = () => {
     fetchItemData();
   }, []);
 
+  const updateCart = async (item) => {
+    const { status } = await addItemToCart({ userId, item });
+    if (status === 200) {
+      refreshCart();
+      history.push("/cart");
+    }
+  };
+
   if (!item) {
     return <div>Loading...</div>;
   }
-
-  console.log(item);
 
   return (
     <Wrapper>
       <Header />
       <ProductDiv>
         <Div1>
-          <ProductName>{item.data.name}</ProductName>
-          <ProductCategory>{item.data.category}</ProductCategory>
-          <ProductImg src={item.data.imageSrc} />
+          <ProductName>{item.name}</ProductName>
+          <ProductCategory>{item.category}</ProductCategory>
+          <ProductImg src={item.imageSrc} />
         </Div1>
         <Div2>
-          <StockProduct>in stock: {item.data.numInStock}</StockProduct>
-          <PriceProduct>{item.data.price}$</PriceProduct>
+          <StockProduct>
+            {item.numInStock > 0
+              ? `in stock: ${item.numInStock}`
+              : "Out of stock"}
+          </StockProduct>
+          <PriceProduct>{item.price}$</PriceProduct>
           <DivButton>
-            <AddtoCartBtn>Add to cart</AddtoCartBtn>
+            <AddtoCartBtn
+              disabled={!(item.numInStock > 0)}
+              onClick={() => {
+                if (!userId) {
+                  //only let logged in users add items to cart
+                  history.push("/signin");
+                  return;
+                }
+                updateCart(item);
+              }}
+            >
+              Add to cart
+            </AddtoCartBtn>
+
           </DivButton>
         </Div2>
       </ProductDiv>
@@ -102,6 +137,9 @@ const AddtoCartBtn = styled.button`
   &:hover  {
     background-color: gold;
     font-weight: bold;
+  }
+  &:disabled {
+    cursor: not-allowed;
   }
 `;
 
