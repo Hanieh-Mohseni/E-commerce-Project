@@ -41,13 +41,6 @@ const ItemDetails = () => {
           <StockProduct>in stock: {item.data.numInStock}</StockProduct>
           <PriceProduct>{item.data.price}$</PriceProduct>
           <DivButton>
-            <BuyButton
-              onClick={() => {
-                item.data.numInStock -= -1;
-              }}
-            >
-              Buy
-            </BuyButton>
             <AddtoCartBtn>Add to cart</AddtoCartBtn>
           </DivButton>
         </Div2>
@@ -96,19 +89,6 @@ const PriceProduct = styled.p`
 const DivButton = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const BuyButton = styled.button`
-  width: 80px;
-  height: 40px;
-  cursor: pointer;
-  border: none;
-  background-color: grey;
-  border-radius: 5px;
-  &:hover  {
-    background-color: gold;
-    font-weight: bold;
-  }
 `;
 
 const AddtoCartBtn = styled.button`
