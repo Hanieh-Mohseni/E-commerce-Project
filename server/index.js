@@ -13,6 +13,7 @@ const {
   signIn,
   signUp,
   addItemToCart,
+  buyItem,
 } = require("./handlers");
 
 const PORT = 4000;
@@ -44,6 +45,7 @@ express()
   .get("/api/companies", getCompanies)
   .get("/api/company/:id", getCompany)
 
+  .post("/api/purchase", buyItem)
   .post("/api/cart", addItemToCart)
 
   //========================================================
