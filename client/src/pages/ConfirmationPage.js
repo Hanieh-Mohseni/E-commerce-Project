@@ -34,7 +34,7 @@ const Confirmation = () => {
                 <ProductName>{item.name}</ProductName>
                 <ProductCategory>{item.category}</ProductCategory>
                 <PriceProduct>{item.price}$</PriceProduct>
-                <Amount>{item.amount}</Amount>
+                <Amount> Amount: x{item.amount}</Amount>
               </Div1>
             </ProductDiv>
           );
@@ -46,7 +46,9 @@ const Confirmation = () => {
 
 const Wrapper = styled.div``;
 
-const Amount = styled.div``;
+const Amount = styled.div`
+  margin-left: 15px;
+`;
 
 const ConfirmationText = styled.h3`
   margin-left: 33%;
@@ -58,7 +60,7 @@ const ConfirmationText = styled.h3`
 const ProductDiv = styled.div`
   display: flex;
   justify-content: left;
-  width: 500px;
+  width: 600px;
   padding: 30px;
 
   background-color: transparent;
