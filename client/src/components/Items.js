@@ -1,16 +1,20 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
-import { ItemsContext } from "./ItemsContext";
+import { useItemsContext } from "./ItemsContext";
 import { NavLink, useHistory } from "react-router-dom";
 import { useUserContext } from "../contexts/UserContext";
 import { addItemToCart } from "../api/users";
 
 const Items = () => {
-  const { data, numOfCartItems, setNumOfCartItems, cartItems, setCartItems } =
-    useContext(ItemsContext);
-  console.log(data);
-
   const history = useHistory();
+
+  const {
+    loading,
+    data,
+    page,
+    actions: { updateCurrentPage, getPaginatedItems },
+  } = useItemsContext();
+
   const {
     state: { userId },
     actions: { refreshCart },
@@ -24,38 +28,63 @@ const Items = () => {
     }
   };
 
-  return (
-    <Wrapper>
-      {data &&
-        data.map((item) => {
-          return (
-            <ProductDiv key={item._id}>
-              <Div1 to={`/item/${item._id}`}>
-                <ProductName>{item.name}</ProductName>
-                <ProductCategory>{item.category}</ProductCategory>
-                <ProductImg src={item.imageSrc} />
-              </Div1>
-              <Div2>
-                <StockProduct>in stock: {item.numInStock}</StockProduct>
-                <PriceProduct>{item.price}$</PriceProduct>
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-                <AddtoCartBtn
-                  onClick={() => {
-                    if (!userId) {
-                      //only let logged in users add items to cart
-                      history.push("/signin");
-                      return;
-                    }
-                    updateCart(item);
-                  }}
-                >
-                  Add to cart
-                </AddtoCartBtn>
-              </Div2>
-            </ProductDiv>
-          );
-        })}
-    </Wrapper>
+  const moveToNextPage = () => {
+    updateCurrentPage(page + 1);
+  };
+
+  const moveToPreviousPage = () => {
+    updateCurrentPage(page - 1);
+  };
+
+  return (
+    <>
+      <Wrapper>
+        {data &&
+          data.map((item) => {
+            return (
+              <ProductDiv key={item._id}>
+                <Div1 to={`/item/${item._id}`}>
+                  <ProductName>{item.name}</ProductName>
+                  <ProductCategory>{item.category}</ProductCategory>
+                  <ProductImg src={item.imageSrc} />
+                </Div1>
+                <Div2>
+                  <StockProduct>in stock: {item.numInStock}</StockProduct>
+                  <PriceProduct>{item.price}$</PriceProduct>
+                  <BuyButton>Buy</BuyButton>
+                  <AddtoCartBtn
+                    onClick={() => {
+                      if (!userId) {
+                        //only let logged in users add items to cart
+                        history.push("/signin");
+                        return;
+                      }
+                      updateCart(item);
+                    }}
+                  >
+                    Add to cart
+                  </AddtoCartBtn>
+                </Div2>
+              </ProductDiv>
+            );
+          })}
+      </Wrapper>
+      <Flex>
+        {page === 1 ? (
+          <PageButton onClick={moveToNextPage}>{page + 1}</PageButton>
+        ) : (
+          <>
+            <PageButton onClick={moveToPreviousPage}>{page - 1}</PageButton>
+            <PageButton onClick={moveToNextPage}>{page + 1}</PageButton>
+          </>
+        )}
+      </Flex>
+    </>
+
   );
 };
 
@@ -130,5 +159,19 @@ const AddtoCartBtn = styled.button`
     font-weight: bold;
     color: black;
   }
+`;
+
+const PageButton = styled.button`
+  cursor: pointer;
+  padding: 5px 10px;
+  background-color: gold;
+  color: white;
+  margin: 0 20px;
+  border: none;
+`;
+
+const Flex = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 export default Items;
