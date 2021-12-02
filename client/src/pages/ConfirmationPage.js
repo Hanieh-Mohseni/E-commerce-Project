@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { NavLink } from "react-router-dom";
 import { useUserContext } from "../contexts/UserContext";
 import Header from "../components/Header";
 
@@ -8,6 +9,7 @@ const Confirmation = () => {
     state: { lastPurchase },
   } = useUserContext();
 
+  //total price
   let total = lastPurchase.reduce((acc, cur) => {
     if (cur.amount === 1) {
       return acc + Number(cur.price.slice(1));
@@ -70,7 +72,7 @@ const ProductDiv = styled.div`
   }
 `;
 
-const Div1 = styled.div`
+const Div1 = styled(NavLink)`
   display: flex;
 
   margin-left: 10px;

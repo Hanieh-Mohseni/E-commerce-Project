@@ -13,12 +13,14 @@ import { useUserContext } from "../contexts/UserContext";
 
 const ItemDetails = () => {
   const history = useHistory();
+  const { itemId } = useParams();
+
   const {
     state: { userId },
     actions: { refreshCart },
   } = useUserContext();
+
   const [item, setItem] = useState("");
-  const { itemId } = useParams();
 
   useEffect(() => {
     const fetchItemData = async () => {
@@ -32,8 +34,10 @@ const ItemDetails = () => {
       }
     };
     fetchItemData();
-  }, []);
+  }, []); // eslint-disable-line
 
+  //update cart on add to cart button press
+  //redirect users to cart page
   const updateCart = async (item) => {
     const { status } = await addItemToCart({ userId, item });
     if (status === 200) {
@@ -76,7 +80,6 @@ const ItemDetails = () => {
             >
               Add to cart
             </AddtoCartBtn>
-
           </DivButton>
         </Div2>
       </ProductDiv>

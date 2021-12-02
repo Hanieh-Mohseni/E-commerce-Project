@@ -14,6 +14,7 @@ const {
   signUp,
   addItemToCart,
   buyItem,
+  deleteItemFromCart,
 } = require("./handlers");
 
 const PORT = 4000;
@@ -47,6 +48,7 @@ express()
 
   .post("/api/purchase", buyItem)
   .post("/api/cart", addItemToCart)
+  .delete("/api/cart", deleteItemFromCart)
 
   //========================================================
 

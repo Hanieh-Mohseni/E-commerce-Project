@@ -16,7 +16,7 @@ const Header = () => {
     <Wrapper>
       <DivUpper>
         <Title to="/">E-com</Title>
-
+        {/* conditional rendering depending on logged in user */}
         {userId ? (
           <LogoutButton
             onClick={() => {
@@ -46,9 +46,7 @@ const DivUpper = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-const SignDiv = styled.div`
-  display: flex;
-`;
+
 const SignInButton = styled(NavLink)`
   color: black;
   font-weight: bold;

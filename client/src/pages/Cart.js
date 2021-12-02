@@ -6,6 +6,7 @@ import { useUserContext } from "../contexts/UserContext";
 
 //apis
 import { purchaseItems } from "../api/items";
+import { deleteItemFromCart } from "../api/users";
 
 const Cart = () => {
   const {
@@ -53,9 +54,17 @@ const Cart = () => {
     }
   };
 
+  //delete item from cart
+  const onClickDelete = async (itemId) => {
+    const { status } = await deleteItemFromCart({ userId, itemId });
+    if (status === 200) {
+      //update cart context
+      await refreshCart();
+    }
+  };
+
   //cart is fetched from usercontext
   //make use of it to show the items in cart
-  console.log(cart);
   return (
     <Wrapper>
       <Header />
@@ -63,14 +72,20 @@ const Cart = () => {
         cart.map((item) => {
           return (
             <ProductDiv key={item._id}>
-              <Div1 to={`/item/${item._id}`}>
+              <Div1 onClick={() => history.push(`/item/${item._id}`)}>
                 <ProductImg src={item.imageSrc} />
                 <ProductName>{item.name}</ProductName>
                 <ProductCategory>{item.category}</ProductCategory>
                 <PriceProduct>{item.price}$</PriceProduct>
                 <Amount>Amount: x{item.amount}</Amount>
               </Div1>
-              <DeleteItemButton>X</DeleteItemButton>
+              <DeleteItemButton
+                onClick={() => {
+                  onClickDelete(item._id);
+                }}
+              >
+                X
+              </DeleteItemButton>
             </ProductDiv>
           );
         })}
@@ -91,8 +106,8 @@ const Amount = styled.div`
 
 const ProductDiv = styled.div`
   display: flex;
-  justify-content: right;
-  width: auto;
+  width: 70%;
+  margin: auto;
   padding: 30px;
   border: black solid 1px;
   border-radius: 5px;
@@ -126,12 +141,6 @@ const ProductCategory = styled.p`
 const ProductImg = styled.img`
   width: 100px;
 `;
-
-// const StockProduct = styled.p`
-//   margin-top: 80px;
-//   font-size: 17px;
-//   font-weight: bold;
-// `;
 
 const PriceProduct = styled.p`
   margin-top: 5px;

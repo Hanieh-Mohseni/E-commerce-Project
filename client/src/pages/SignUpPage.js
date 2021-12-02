@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
-import { NavLink, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { signUp } from "../api/users";
 
 //hooks
@@ -18,12 +18,10 @@ const SignUpPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { status, data } = await signUp(userInfo);
+    const { status } = await signUp(userInfo);
     //successful signup
     if (status === 200) {
-      //**TODO**
-      //context for current user
-      //update the user state
+      //redirect to user to sign in page after registration
       history.push("/signin");
     } else {
       //server error

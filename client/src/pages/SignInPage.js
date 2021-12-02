@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
-import { NavLink, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 //apis
 import { signIn } from "../api/users";
@@ -14,11 +14,15 @@ const SignInPage = () => {
   const {
     actions: { login },
   } = useUserContext();
+
   const history = useHistory();
+
   const initialState = {
     email: "",
   };
+
   const [input, handleInputChange] = useInputState(initialState);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { status, data } = await signIn(input);

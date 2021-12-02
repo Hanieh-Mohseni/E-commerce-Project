@@ -1,6 +1,5 @@
 import React, { useEffect, createContext, useState, useContext } from "react";
-import { useFetch } from "../hooks/useFetch/index";
-import { getItems } from "../api/items";
+import { getItems } from "../../api/items";
 
 export const ItemsContext = createContext(null);
 
@@ -26,7 +25,7 @@ export const ItemsProvider = ({ children }) => {
   //get page 1 on load
   useEffect(() => {
     getPaginatedItems();
-  }, [page]);
+  }, [page]); // eslint-disable-line
 
   return (
     <ItemsContext.Provider
