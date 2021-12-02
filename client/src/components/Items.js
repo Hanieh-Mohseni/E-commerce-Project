@@ -84,6 +84,7 @@ const Items = () => {
         )}
       </Flex>
     </>
+
   );
 };
 
@@ -142,22 +143,6 @@ const PriceProduct = styled.p`
   margin-top: 10px;
   font-size: 20px;
   color: goldenrod;
-`;
-
-const BuyButton = styled.button`
-  cursor: pointer;
-  border: none;
-  background-color: grey;
-  border-radius: 5px;
-  width: 90px;
-  height: 30px;
-  color: white;
-
-  &:hover  {
-    background-color: gold;
-    font-weight: bold;
-    color: black;
-  }
 `;
 
 const AddtoCartBtn = styled.button`
