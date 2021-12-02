@@ -12,7 +12,7 @@ const Items = () => {
     loading,
     data,
     page,
-    actions: { updateCurrentPage, getPaginatedItems },
+    actions: { updateCurrentPage },
   } = useItemsContext();
 
   const {

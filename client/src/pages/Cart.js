@@ -76,7 +76,7 @@ const Cart = () => {
         })}
       <Div2>
         <TotalPrice>Total: {totalPrice} $</TotalPrice>
-        <BuyButton onClick={onClickBuy}>Buy</BuyButton>
+        {cart.length !== 0 && <BuyButton onClick={onClickBuy}>Buy</BuyButton>}
       </Div2>
     </Wrapper>
   );
