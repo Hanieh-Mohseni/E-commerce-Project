@@ -71,6 +71,15 @@ const LogoutButton = styled.button`
   cursor: pointer;
   margin-right: 10px;
   margin-top: 5px;
+  border: none;
+  font-size: 20px;
+  font-family: "Bebas Neue", cursive;
+  background-color: transparent;
+  cursor: pointer;
+  &:hover {
+    color: red;
+    font-size: 22px;
+  }
 `;
 
 export default Header;
