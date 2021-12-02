@@ -68,7 +68,7 @@ const Cart = () => {
                 <ProductName>{item.name}</ProductName>
                 <ProductCategory>{item.category}</ProductCategory>
                 <PriceProduct>{item.price}$</PriceProduct>
-                <Amount>{item.amount}</Amount>
+                <Amount>Amount: x{item.amount}</Amount>
               </Div1>
               <DeleteItemButton>X</DeleteItemButton>
             </ProductDiv>
@@ -84,7 +84,10 @@ const Cart = () => {
 
 const Wrapper = styled.div``;
 
-const Amount = styled.div``;
+const Amount = styled.div`
+  color: grey;
+  margin-top: 6px;
+`;
 
 const ProductDiv = styled.div`
   display: flex;
@@ -111,6 +114,7 @@ const Div1 = styled.div`
 
 const ProductName = styled.h3`
   margin-top: 2px;
+  margin-left: 10px;
   margin-bottom: 4px;
 `;
 const ProductCategory = styled.p`
@@ -132,6 +136,7 @@ const ProductImg = styled.img`
 const PriceProduct = styled.p`
   margin-top: 5px;
   margin-left: 75px;
+  margin-right: 50px;
   font-size: 20px;
   color: goldenrod;
 `;

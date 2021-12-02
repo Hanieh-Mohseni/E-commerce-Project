@@ -76,6 +76,7 @@ const ItemDetails = () => {
             >
               Add to cart
             </AddtoCartBtn>
+
           </DivButton>
         </Div2>
       </ProductDiv>
