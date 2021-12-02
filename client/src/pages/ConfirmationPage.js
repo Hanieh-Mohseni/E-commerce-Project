@@ -5,11 +5,14 @@ import Header from "../components/Header";
 
 const Confirmation = () => {
   const {
-    state: { cart },
+    state: { lastPurchase },
   } = useUserContext();
 
-  let total = cart.reduce((acc, cur) => {
-    return acc + Number(cur.price.slice(1));
+  let total = lastPurchase.reduce((acc, cur) => {
+    if (cur.amount === 1) {
+      return acc + Number(cur.price.slice(1));
+    }
+    return acc + Number(cur.price.slice(1)) * cur.amount;
   }, 0);
 
   const userSession = JSON.parse(sessionStorage.getItem("user"));
@@ -22,8 +25,8 @@ const Confirmation = () => {
         {userSession.firstName + " " + userSession.lastName}, Your order is
         confirmed!
       </ConfirmationText>
-      {cart &&
-        cart.map((item) => {
+      {lastPurchase &&
+        lastPurchase.map((item) => {
           return (
             <ProductDiv key={item._id}>
               <Div1 to={`/item/${item._id}`}>
@@ -31,6 +34,7 @@ const Confirmation = () => {
                 <ProductName>{item.name}</ProductName>
                 <ProductCategory>{item.category}</ProductCategory>
                 <PriceProduct>{item.price}$</PriceProduct>
+                <Amount>{item.amount}</Amount>
               </Div1>
             </ProductDiv>
           );
@@ -41,6 +45,8 @@ const Confirmation = () => {
 };
 
 const Wrapper = styled.div``;
+
+const Amount = styled.div``;
 
 const ConfirmationText = styled.h3`
   margin-left: 33%;

@@ -227,24 +227,37 @@ const addItemToCart = async (req, res) => {
 const buyItem = async (req, res) => {
   // declare the client
   const client = new MongoClient(MONGO_URI, options);
-  const { userId, itemId } = req.body;
-  console.log(userId, itemId);
+  const { userId, itemIds } = req.body;
+  console.log(userId, itemIds);
   try {
     //connect on every request
     await client.connect();
     const db = client.db(DB_NAME);
 
     // updating the number of item in stock
-    const { value: decValue } = await db
-      .collection("items")
-      .findOneAndUpdate({ _id: Number(itemId) }, { $inc: { numInStock: -1 } });
 
-    // adding purchase prop
-    const { value } = await db
+    const result = await Promise.all(
+      itemIds.map(async (itemId) => {
+        const { value: decValue } = await db
+          .collection("items")
+          .findOneAndUpdate(
+            { _id: Number(itemId) },
+            { $inc: { numInStock: -1 } }
+          );
+        // adding purchase prop
+        const { value } = await db
+          .collection("users")
+          .findOneAndUpdate({ _id: userId }, { $push: { purchased: itemId } });
+
+        return decValue && value;
+      })
+    );
+
+    const { value: cartVal } = await db
       .collection("users")
-      .findOneAndUpdate({ _id: userId }, { $push: { purchased: itemId } });
+      .findOneAndUpdate({ _id: userId }, { $set: { cart: [] } });
 
-    decValue && value
+    result && cartVal
       ? res.status(200).json({
           status: 200,
           data: { ...req.body },
