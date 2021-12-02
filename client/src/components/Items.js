@@ -55,7 +55,7 @@ const Items = () => {
                 <Div2>
                   <StockProduct>in stock: {item.numInStock}</StockProduct>
                   <PriceProduct>{item.price}$</PriceProduct>
-                  <BuyButton>Buy</BuyButton>
+
                   <AddtoCartBtn
                     onClick={() => {
                       if (!userId) {
@@ -84,7 +84,6 @@ const Items = () => {
         )}
       </Flex>
     </>
-
   );
 };
 
