@@ -16,6 +16,7 @@ const initialState = sessionStorage.getItem("user")
       lastName: null,
       cart: [],
       purchased: [],
+      lastPurchase: [],
     };
 
 const reducer = (state, action) => {
@@ -39,6 +40,13 @@ const reducer = (state, action) => {
         ...state,
         cart,
       };
+    case actions.UPDATE_PURCHASE:
+      const purchase = action.payload.purchase;
+      return {
+        ...state,
+        lastPurchase: purchase,
+      };
+
     default:
       throw new Error(`Unknown Error`);
   }
@@ -84,11 +92,19 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const updatePurchase = (purchase) => {
+    console.log(purchase);
+    dispatch({
+      type: actions.UPDATE_PURCHASE,
+      payload: { purchase },
+    });
+  };
+
   return (
     <UserContext.Provider
       value={{
         state,
-        actions: { login, logout, refreshCart },
+        actions: { login, logout, refreshCart, updatePurchase },
       }}
     >
       {children}

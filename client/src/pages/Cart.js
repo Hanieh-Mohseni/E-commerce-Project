@@ -4,9 +4,13 @@ import styled from "styled-components";
 import Header from "../components/Header";
 import { useUserContext } from "../contexts/UserContext";
 
+//apis
+import { purchaseItems } from "../api/items";
+
 const Cart = () => {
   const {
     state: { userId, cart },
+    actions: { refreshCart, updatePurchase },
   } = useUserContext();
   const history = useHistory();
 
@@ -16,10 +20,38 @@ const Cart = () => {
   }
 
   let total = cart.reduce((acc, cur) => {
-    return acc + Number(cur.price.slice(1));
+    if (cur.amount === 1) {
+      return acc + Number(cur.price.slice(1));
+    }
+    return acc + Number(cur.price.slice(1)) * cur.amount;
   }, 0);
 
   const totalPrice = total.toFixed(2);
+
+  const onClickBuy = async (e) => {
+    e.preventDefault();
+
+    // this sucks
+    const extra = [];
+    const itemIds = cart.map((item) => {
+      if (item.amount === 1) {
+        return item._id;
+      }
+      for (let i = 0; i < item.amount - 1; i++) {
+        extra.push(item._id);
+      }
+      return item._id;
+    });
+    const { status } = await purchaseItems({
+      userId,
+      itemIds: [...itemIds, ...extra],
+    });
+    if (status === 200) {
+      await updatePurchase(cart);
+      await refreshCart();
+      history.push("/confirmation");
+    }
+  };
 
   //cart is fetched from usercontext
   //make use of it to show the items in cart
@@ -36,6 +68,7 @@ const Cart = () => {
                 <ProductName>{item.name}</ProductName>
                 <ProductCategory>{item.category}</ProductCategory>
                 <PriceProduct>{item.price}$</PriceProduct>
+                <Amount>{item.amount}</Amount>
               </Div1>
               <DeleteItemButton>X</DeleteItemButton>
             </ProductDiv>
@@ -43,13 +76,15 @@ const Cart = () => {
         })}
       <Div2>
         <TotalPrice>Total: {totalPrice} $</TotalPrice>
-        <BuyButton>Buy</BuyButton>
+        <BuyButton onClick={onClickBuy}>Buy</BuyButton>
       </Div2>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div``;
+
+const Amount = styled.div``;
 
 const ProductDiv = styled.div`
   display: flex;

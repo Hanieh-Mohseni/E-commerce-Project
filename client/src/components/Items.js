@@ -45,6 +45,7 @@ const Items = () => {
       <Wrapper>
         {data &&
           data.map((item) => {
+            const itemAvailable = item.numInStock > 0;
             return (
               <ProductDiv key={item._id}>
                 <Div1 to={`/item/${item._id}`}>
@@ -53,10 +54,14 @@ const Items = () => {
                   <ProductImg src={item.imageSrc} />
                 </Div1>
                 <Div2>
-                  <StockProduct>in stock: {item.numInStock}</StockProduct>
+                  <StockProduct>
+                    {itemAvailable
+                      ? `in stock: ${item.numInStock}`
+                      : "Out of stock"}
+                  </StockProduct>
                   <PriceProduct>{item.price}$</PriceProduct>
-
                   <AddtoCartBtn
+                    disabled={!itemAvailable}
                     onClick={() => {
                       if (!userId) {
                         //only let logged in users add items to cart
@@ -153,6 +158,12 @@ const AddtoCartBtn = styled.button`
   color: white;
 
   background-color: grey;
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: none;
+  }
+
   &:hover  {
     background-color: gold;
     font-weight: bold;
